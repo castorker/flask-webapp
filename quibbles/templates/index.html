@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quibbles -- Welcome
+{%  endblock %}
+
+{% block content %}
+    <article>
+        <header>
+            <h1>Welcome</h1>
+            <p>Quibbles is a simple leisure site for <strong>playing with words</strong>.</p>
+        </header>
+
+        <section>
+            <h2>Recently Added</h2>
+                {% if new_quibbles %}
+                    <ul>
+                        {% for q in new_quibbles %}
+                            <li>
+                                <a href='{{ url_for("user", username=q.user.username) }}'> {{ q.user.username }}</a>
+                                added {{ q.text }} {{ q.category }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    No quibbles yet.
+                {% endif %}
+        </section>
+
+    </article>
+{% endblock %}

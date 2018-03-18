@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quibbles -- Quibbles for user {{ user.username }}
+{%  endblock %}
+
+{% block content %}
+    <article>
+        <header>
+             <h1>Quibbles for {{ user.username }}</h1>
+            <ul>
+                {% for quibble in user.quibbles %}
+                    <li>
+                        {{ quibble.text }} | {{ quibble.category }}<br>
+                        <span class="timestamp">Added at {{ quibble.date }}</span>
+                    </li>
+                {% else %}
+                    <li>This user has not added any quibbles yet.</li>
+                {% endfor %}
+            </ul>
+        </header>
+
+    </article>
+{% endblock %}
