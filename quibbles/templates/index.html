@@ -12,19 +12,14 @@ Quibbles -- Welcome
         </header>
 
         <section>
-            <h2>Recently Added</h2>
-                {% if new_quibbles %}
-                    <ul>
-                        {% for q in new_quibbles %}
-                            <li>
-                                <a href='{{ url_for("user", username=q.user.username) }}'> {{ q.user.username }}</a>
-                                added {{ q.text }} {{ q.category }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    No quibbles yet.
-                {% endif %}
+            <h2>Recently added</h2>
+            {% if new_quibbles.count() > 0 %}
+                {% with quibbles=new_quibbles %}
+                    {% include "quibble_list.html" %}
+                {% endwith %}
+            {% else %}
+                No quibbles have been added yet.
+            {% endif %}
         </section>
 
     </article>

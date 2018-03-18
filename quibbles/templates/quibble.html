@@ -1,0 +1,37 @@
+<div class="quibble">
+    <a class="header">
+        <h3 class="category">
+            {{ quibble.category|truncate(50, killwords=True) }}
+        </h3>
+        <span class="text">
+            {{ quibble.text|truncate(100, killwords=True) }}
+        </span>
+    </a>
+
+
+    <div class="info">
+        <span class="tags">
+            {% if quibble.tags %}
+                {% for t in quibble._tags %}
+                    <a href="{{ url_for('tag', name=t.name) }}">{{ t }}</a>
+                {% endfor %}
+            {% else %}
+                No tags.
+            {% endif %}
+        </span>
+        <br>
+        Added by <a href="{{ url_for('user', username=quibble.user.username) }}">
+            {{ quibble.user.username }}
+        </a>
+        {{ moment(quibble.date).fromNow() }}.
+        {% if current_user == quibble.user and not nolinks %}
+            <span class="editlinks">
+                <a href="{{ url_for('edit_quibble', quibble_id=quibble.id) }}">edit</a>
+                <a href="{{ url_for('delete_quibble', quibble_id=quibble.id) }}">delete</a>
+            </span>
+        {% endif %}
+    </div>
+</div>
+
+
+

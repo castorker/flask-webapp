@@ -7,16 +7,32 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from quibbles import db
 
 
+tags = db.Table('quibble_tag',
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
+    db.Column('quibble_id', db.Integer, db.ForeignKey('quibble.id'))
+)
+
+
 class Quibble(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(50))
     date = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    _tags = db.relationship('Tag', secondary=tags, backref=db.backref('quibbles', lazy='dynamic'))
 
     @staticmethod
     def newest(num):
         return Quibble.query.order_by(desc(Quibble.date)).limit(num)
+
+    @property
+    def tags(self):
+        return ",".join([t.name for t in self._tags])
+
+    @tags.setter
+    def tags(self, string):
+        if string:
+            self._tags = [Tag.get_or_create(name) for name in string.split(',')]
 
     def __repr__(self):
         return "<Quibble '{}' - '{}'>".format(self.category, self.text)
@@ -46,3 +62,22 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return "<User '{}'>".format(self.username)
+
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(25), nullable=False, unique=True, index=True)
+
+    @staticmethod
+    def get_or_create(name):
+        try:
+            return Tag.query.filter_by(name=name).one()
+        except:
+            return Tag(name=name)
+
+    @staticmethod
+    def all():
+        return Tag.query.all()
+
+    def __repr__(self):
+        return self.name

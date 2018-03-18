@@ -162,14 +162,23 @@ nav a:hover {
 /* link styling */
 a,
 a:visited {
-    color: #8F540D;
+    color: #1E5373;
 }
+
 a:hover, aside a:hover, aside a:visited:hover {
     color: #D39447;
 }
 
-a:visited {
-    color: #1E5373;
+aside a {
+    color: #756f0a;
+}
+
+aside a:hover {
+    color: #F5BB73;
+}
+
+aside a:visited {
+    color: #164ccc;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -204,6 +213,42 @@ article.flashes {
     margin-bottom: 1em;
 }
 
+/* fix form layout with flashes */
+section {
+    clear: left;
+}
+
+/* quibble list styling */
+ul.quibbles {
+    list-style: none none;
+    padding-left: 0;
+}
+
+.quibble {
+    padding-bottom: .5em;
+    border-top: 1px solid #7EA6BF;
+    padding: 1em 0;
+}
+
+a.header {
+    color: #326786;
+    text-decoration: none;
+    display: block;
+}
+
+a.header h3 {
+    margin: 0 0;
+}
+
+div.info {
+    font-size: .95em;
+    color: #666666;
+}
+
+span.editlinks {
+    float: right;
+}
+
 .error, .error input {
     color: red;
 }
@@ -216,7 +261,18 @@ tr.submit button {
     margin-top: 20px;
 }
 
-input, button {
+input, textarea,
+div.select2-container {
+    width:100%;
+}
+
+input[type="checkbox"],
+input[type="submit"] {
+    width: auto;
+}
+
+input, button, textarea,
+div.select2-container {
     margin-left: 10px;
 }
 
