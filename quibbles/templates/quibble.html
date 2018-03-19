@@ -13,21 +13,21 @@
         <span class="tags">
             {% if quibble.tags %}
                 {% for t in quibble._tags %}
-                    <a href="{{ url_for('tag', name=t.name) }}">{{ t }}</a>
+                    <a href="{{ url_for('quibbles.tag', name=t.name) }}">{{ t }}</a>
                 {% endfor %}
             {% else %}
                 No tags.
             {% endif %}
         </span>
         <br>
-        Added by <a href="{{ url_for('user', username=quibble.user.username) }}">
+        Added by <a href="{{ url_for('quibbles.user', username=quibble.user.username) }}">
             {{ quibble.user.username }}
         </a>
         {{ moment(quibble.date).fromNow() }}.
         {% if current_user == quibble.user and not nolinks %}
             <span class="editlinks">
-                <a href="{{ url_for('edit_quibble', quibble_id=quibble.id) }}">edit</a>
-                <a href="{{ url_for('delete_quibble', quibble_id=quibble.id) }}">delete</a>
+                <a href="{{ url_for('quibbles.edit', quibble_id=quibble.id) }}">edit</a>
+                <a href="{{ url_for('quibbles.delete', quibble_id=quibble.id) }}">delete</a>
             </span>
         {% endif %}
     </div>

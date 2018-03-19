@@ -1,28 +1,40 @@
-import os
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_moment import Moment
+from flask_debugtoolbar import DebugToolbarExtension
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+from .config import config_by_name
 
-app = Flask(__name__)
-
-# Configure database
-app.config['SECRET_KEY'] = 'uV\xa0t\xe2\xf1\x0c\xf7VJ\x1a\xfe\xe7R\x91FeIf\xdb^\xc2\xe8k'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'quibbles.db')
-app.config['DEBUG'] = True
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
 # Configure authentication
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
-login_manager.login_view = "login"
-login_manager.init_app(app)
+login_manager.login_view = "auth.login"
+
+# enable debug tool bar
+toolbar = DebugToolbarExtension()
 
 # to display timestamps in a nicer way
-moment = Moment(app)
+moment = Moment()
 
-from . import models
-from . import views
+
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(config_by_name[config_name])
+    db.init_app(app)
+    login_manager.init_app(app)
+    moment.init_app(app)
+    toolbar.init_app(app)
+
+    from . main import main as main_blueprint
+    app.register_blueprint(main_blueprint, url_prefix='/')
+
+    from . quibbles import quibbles as quibble_blueprint
+    app.register_blueprint(quibble_blueprint, url_prefix='/quibbles')
+
+    from . auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    return app
